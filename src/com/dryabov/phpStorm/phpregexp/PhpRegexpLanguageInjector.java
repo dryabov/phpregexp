@@ -35,7 +35,7 @@ public class PhpRegexpLanguageInjector implements MultiHostInjector {
 
     @Override
     public void getLanguagesToInject(@NotNull final MultiHostRegistrar registrar, @NotNull final PsiElement element) {
-        if (!(element instanceof StringLiteralExpression) || !((StringLiteralExpression) element).isValidHost()) {
+        if (!(element instanceof StringLiteralExpression) || !((PsiLanguageInjectionHost) element).isValidHost()) {
             return;
         }
 
@@ -49,7 +49,7 @@ public class PhpRegexpLanguageInjector implements MultiHostInjector {
         boolean skipElement = true;
 
         if (parent instanceof ParameterList &&
-                ((StringLiteralExpressionImpl) element).getPrevPsiSibling() == null) {
+                ((PhpPsiElement) element).getPrevPsiSibling() == null) {
             parent = parent.getParent();
             if (parent instanceof FunctionReference) {
                 final String fqn = ((FunctionReference) parent).getFQN();
@@ -60,7 +60,7 @@ public class PhpRegexpLanguageInjector implements MultiHostInjector {
         } else if (parent instanceof PhpPsiElement) { // array value element
             parent = parent.getParent();
             if (parent instanceof ArrayCreationExpression &&
-                    ((ArrayCreationExpression) parent).getPrevPsiSibling() == null) {
+                    ((PhpPsiElement) parent).getPrevPsiSibling() == null) {
                 parent = parent.getParent();
                 if (parent instanceof ParameterList) {
                     parent = parent.getParent();
@@ -138,7 +138,7 @@ public class PhpRegexpLanguageInjector implements MultiHostInjector {
 
         final int endPos = pos;
         final boolean commentMode = regex.indexOf('x', endPos + 1) >= 0;
-        final int offset = ((StringLiteralExpressionImpl) element).getValueRange().getStartOffset();
+        final int offset = ((StringLiteralExpression) element).getValueRange().getStartOffset();
 
         registrar
                 .startInjecting(commentMode ? PhpRegexpCommentModeLanguage.INSTANCE : PhpRegexpLanguage.INSTANCE)
