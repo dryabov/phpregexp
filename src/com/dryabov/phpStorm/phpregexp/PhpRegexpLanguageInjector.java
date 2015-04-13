@@ -46,7 +46,7 @@ public class PhpRegexpLanguageInjector implements MultiHostInjector {
         }
 
         PsiElement parent = element.getParent();
-        boolean isRegexp = false;
+        boolean skipElement = true;
 
         if (parent instanceof ParameterList &&
                 ((StringLiteralExpressionImpl) element).getPrevPsiSibling() == null) {
@@ -74,15 +74,15 @@ public class PhpRegexpLanguageInjector implements MultiHostInjector {
             }
         }
 
-        if (!isRegexp) {
+        if (skipElement) {
             final char c = regex.charAt(0);
             // popular regexp delimiters
             if ("!#%&/=@_`|~".indexOf(c) >= 0) {
-                isRegexp = regex.matches(c + "(?:[^\\\\" + c + "]+|\\\\.)+" + c + "[imsuxADSUX]*");
+                skipElement = !regex.matches(c + "(?:[^\\\\" + c + "]+|\\\\.)+" + c + "[imsuxADSUX]*");
             }
         }
 
-        if (!isRegexp) {
+        if (skipElement) {
             return;
         }
 
