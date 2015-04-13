@@ -1,0 +1,32 @@
+<idea-plugin version="2">
+  <id>com.dryabov.phpregexp</id>
+  <name>PHP RegExp Support</name>
+  <version>0.9.0</version>
+  <vendor email="dryabov@yandex.ru" url="https://github.com/dryabov">Denis Ryabov</vendor>
+
+  <description><![CDATA[
+      Support of regular expressions parsing in PhpStorm
+    ]]></description>
+
+  <change-notes><![CDATA[
+      0.9.0 Initial release
+    ]]>
+  </change-notes>
+
+  <idea-version since-build="131"/>
+  <depends>com.jetbrains.php</depends>
+  <depends>com.intellij.modules.platform</depends>
+
+  <extensions defaultExtensionNs="com.intellij">
+    <multiHostInjector implementation="com.dryabov.phpStorm.phpregexp.PhpRegexpLanguageInjector"/>
+    <lang.parserDefinition language="PhpRegExp" implementationClass="com.dryabov.phpStorm.phpregexp.PhpRegexpParserDefinition"/>
+    <lang.parserDefinition language="PhpRegExpCommentMode" implementationClass="com.dryabov.phpStorm.phpregexp.PhpRegexpCommentModeParserDefinition"/>
+  </extensions>
+
+  <application-components>
+  </application-components>
+  <project-components>
+  </project-components>
+  <actions>
+  </actions>
+</idea-plugin>
