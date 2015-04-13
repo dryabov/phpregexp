@@ -48,7 +48,8 @@ public class PhpRegexpLanguageInjector implements MultiHostInjector {
         PsiElement parent = element.getParent();
         boolean isRegexp = false;
 
-        if (parent instanceof ParameterList) {
+        if (parent instanceof ParameterList &&
+                ((StringLiteralExpressionImpl) element).getPrevPsiSibling() == null) {
             parent = parent.getParent();
             if (parent instanceof FunctionReference) {
                 String FQN = ((FunctionReference) parent).getFQN();
@@ -58,7 +59,8 @@ public class PhpRegexpLanguageInjector implements MultiHostInjector {
             }
         } else if (parent instanceof PhpPsiElement) { // array value element
             parent = parent.getParent();
-            if (parent instanceof ArrayCreationExpression) {
+            if (parent instanceof ArrayCreationExpression &&
+                    ((ArrayCreationExpression) parent).getPrevPsiSibling() == null) {
                 parent = parent.getParent();
                 if (parent instanceof ParameterList) {
                     parent = parent.getParent();
