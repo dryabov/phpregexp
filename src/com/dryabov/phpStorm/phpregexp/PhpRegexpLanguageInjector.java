@@ -14,7 +14,7 @@ import java.util.Collections;
 import java.util.List;
 
 public class PhpRegexpLanguageInjector implements MultiHostInjector {
-    private static final List<String> pregMethodsStringArg = Arrays.asList(
+    private static final List<String> PREG_METHODS_STRING_ARG = Arrays.asList(
             "\\preg_filter", // (string|array,...)
             "\\preg_grep", // (string,...)
             "\\preg_match", // (string,...)
@@ -23,7 +23,7 @@ public class PhpRegexpLanguageInjector implements MultiHostInjector {
             "\\preg_replace_callback", // (string|array,...)
             "\\preg_split" // (string,...)
     );
-    private static final List<String> pregMethodsArrayArg = Arrays.asList(
+    private static final List<String> PREG_METHODS_ARRAY_ARG = Arrays.asList(
             "\\preg_filter", "\\preg_replace", "\\preg_replace_callback"
     );
 
@@ -52,9 +52,9 @@ public class PhpRegexpLanguageInjector implements MultiHostInjector {
                 ((StringLiteralExpressionImpl) element).getPrevPsiSibling() == null) {
             parent = parent.getParent();
             if (parent instanceof FunctionReference) {
-                String FQN = ((FunctionReference) parent).getFQN();
-                if (pregMethodsStringArg.contains(FQN)) {
-                    isRegexp = true;
+                final String fqn = ((FunctionReference) parent).getFQN();
+                if (PREG_METHODS_STRING_ARG.contains(fqn)) {
+                    skipElement = false;
                 }
             }
         } else if (parent instanceof PhpPsiElement) { // array value element
@@ -65,9 +65,9 @@ public class PhpRegexpLanguageInjector implements MultiHostInjector {
                 if (parent instanceof ParameterList) {
                     parent = parent.getParent();
                     if (parent instanceof FunctionReference) {
-                        String FQN = ((FunctionReference) parent).getFQN();
-                        if (pregMethodsArrayArg.contains(FQN)) {
-                            isRegexp = true;
+                        final String fqn = ((FunctionReference) parent).getFQN();
+                        if (PREG_METHODS_ARRAY_ARG.contains(fqn)) {
+                            skipElement = false;
                         }
                     }
                 }
@@ -93,29 +93,29 @@ public class PhpRegexpLanguageInjector implements MultiHostInjector {
         }
 
         // get delimiters
-        final char start_delimiter = regex.charAt(pos++);
-        if (isalnum(start_delimiter) || start_delimiter == '\\') {
+        final char startDelimiter = regex.charAt(pos++);
+        if (isalnum(startDelimiter) || startDelimiter == '\\') {
             return;
         }
 
-        final int start_pos = pos;
+        final int startPos = pos;
 
-        char end_delimiter;
-        switch (start_delimiter) {
+        final char endDelimiter;
+        switch (startDelimiter) {
             case '(':
-                end_delimiter = ')';
+                endDelimiter = ')';
                 break;
             case '[':
-                end_delimiter = ']';
+                endDelimiter = ']';
                 break;
             case '{':
-                end_delimiter = '}';
+                endDelimiter = '}';
                 break;
             case '<':
-                end_delimiter = '>';
+                endDelimiter = '>';
                 break;
             default:
-                end_delimiter = start_delimiter;
+                endDelimiter = startDelimiter;
         }
 
         // get pattern
@@ -124,9 +124,9 @@ public class PhpRegexpLanguageInjector implements MultiHostInjector {
             final char c = regex.charAt(pos);
             if (c == '\\') {
                 pos++;
-            } else if (c == end_delimiter && --brackets <= 0) {
+            } else if (c == endDelimiter && --brackets <= 0) {
                 break;
-            } else if (c == start_delimiter) {
+            } else if (c == startDelimiter) {
                 brackets++;
             }
             pos++;
@@ -136,14 +136,14 @@ public class PhpRegexpLanguageInjector implements MultiHostInjector {
             return;
         }
 
-        final int end_pos = pos;
-        final boolean commentMode = regex.indexOf('x', end_pos + 1) >= 0;
+        final int endPos = pos;
+        final boolean commentMode = regex.indexOf('x', endPos + 1) >= 0;
         final int offset = ((StringLiteralExpressionImpl) element).getValueRange().getStartOffset();
 
         registrar
                 .startInjecting(commentMode ? PhpRegexpCommentModeLanguage.INSTANCE : PhpRegexpLanguage.INSTANCE)
                 .addPlace(null, null, (PsiLanguageInjectionHost) element,
-                        TextRange.create(offset + start_pos, offset + end_pos))
+                        TextRange.create(offset + startPos, offset + endPos))
                 .doneInjecting();
     }
 
