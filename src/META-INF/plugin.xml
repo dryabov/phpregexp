@@ -1,5 +1,5 @@
 <idea-plugin version="2">
-  <id>com.dryabov.phpregexp</id>
+  <id>com.dryabov.phpStorm.phpregexp</id>
   <name>PHP RegExp Support</name>
   <version>0.9.0</version>
   <vendor email="dryabov@yandex.ru" url="https://github.com/dryabov">Denis Ryabov</vendor>
