@@ -24,13 +24,14 @@ public class PhpRegexpParserDefinition extends RegExpParserDefinition {
 //            RegExpCapability.POSIX_BRACKET_EXPRESSIONS,
     );
 
+    @Override
     @NotNull
-    public Lexer createLexer(Project project) {
+    public Lexer createLexer(final Project project) {
         return new RegExpLexer(CAPABILITIES);
     }
 
     @Override
-    public PsiParser createParser(Project project) {
+    public PsiParser createParser(final Project project) {
         return new RegExpParser(CAPABILITIES);
     }
 
@@ -40,7 +41,7 @@ public class PhpRegexpParserDefinition extends RegExpParserDefinition {
     }
 
     @Override
-    public PsiFile createFile(FileViewProvider viewProvider) {
+    public PsiFile createFile(final FileViewProvider viewProvider) {
         return new RegExpFile(viewProvider, PhpRegexpLanguage.INSTANCE);
     }
 }
