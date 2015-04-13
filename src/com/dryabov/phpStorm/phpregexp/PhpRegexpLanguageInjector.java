@@ -41,7 +41,7 @@ public class PhpRegexpLanguageInjector implements MultiHostInjector {
 
         final String regex = ((StringLiteralExpression) element).getContents();
         final int length = regex.length();
-        if (length < 2) {
+        if (length <= 2) {
             return;
         }
 
@@ -72,7 +72,7 @@ public class PhpRegexpLanguageInjector implements MultiHostInjector {
             }
         }
 
-        if (!isRegexp && length > 2) {
+        if (!isRegexp) {
             final char c = regex.charAt(0);
             // popular regexp delimiters
             if ("!#%&/=@_`|~".indexOf(c) >= 0) {
