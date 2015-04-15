@@ -6,7 +6,7 @@ import org.intellij.lang.regexp.RegExpLanguage;
 public class PhpRegexpLanguage extends Language {
     public static final PhpRegexpLanguage INSTANCE = new PhpRegexpLanguage();
 
-    public PhpRegexpLanguage() {
+    private PhpRegexpLanguage() {
         super(RegExpLanguage.INSTANCE, "PhpRegExp");
     }
 }

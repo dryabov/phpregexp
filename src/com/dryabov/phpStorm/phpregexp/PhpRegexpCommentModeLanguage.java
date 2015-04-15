@@ -6,7 +6,7 @@ import org.intellij.lang.regexp.RegExpLanguage;
 public class PhpRegexpCommentModeLanguage extends Language {
     public static final PhpRegexpCommentModeLanguage INSTANCE = new PhpRegexpCommentModeLanguage();
 
-    public PhpRegexpCommentModeLanguage() {
+    private PhpRegexpCommentModeLanguage() {
         super(RegExpLanguage.INSTANCE, "PhpRegExpCommentMode");
     }
 }
