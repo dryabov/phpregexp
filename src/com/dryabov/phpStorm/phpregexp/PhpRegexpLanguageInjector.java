@@ -42,17 +42,19 @@ public class PhpRegexpLanguageInjector implements MultiHostInjector {
             return;
         }
 
-        final String regex = ((StringLiteralExpression) element).getContents();
+        final StringLiteralExpressionImpl expr = (StringLiteralExpressionImpl) element;
+
+        final String regex = expr.getContents();
         final int length = regex.length();
         if (length <= 2) {
             return;
         }
 
-        PsiElement parent = element.getParent();
         boolean skipElement = true;
 
-        if (parent instanceof ParameterList &&
-                ((PhpPsiElement) element).getPrevPsiSibling() == null) {
+        PsiElement parent = expr.getParent();
+
+        if (parent instanceof ParameterList && expr.getPrevPsiSibling() == null) {
             parent = parent.getParent();
             if (parent instanceof FunctionReference) {
                 final String fqn = ((FunctionReference) parent).getFQN();
@@ -141,12 +143,11 @@ public class PhpRegexpLanguageInjector implements MultiHostInjector {
 
         final int endPos = pos;
         final boolean commentMode = regex.indexOf('x', endPos + 1) >= 0;
-        final int offset = ((StringLiteralExpression) element).getValueRange().getStartOffset();
 
         registrar
                 .startInjecting(commentMode ? PhpRegexpCommentModeLanguage.INSTANCE : PhpRegexpLanguage.INSTANCE)
                 .addPlace(null, null, (PsiLanguageInjectionHost) element,
-                        TextRange.create(offset + startPos, offset + endPos))
+                        TextRange.create(startPos, endPos).shiftRight(expr.getValueRange().getStartOffset()))
                 .doneInjecting();
     }
 
