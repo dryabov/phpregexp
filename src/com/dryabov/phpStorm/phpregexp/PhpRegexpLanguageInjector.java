@@ -27,6 +27,9 @@ public class PhpRegexpLanguageInjector implements MultiHostInjector {
             "\\preg_filter", "\\preg_replace", "\\preg_replace_callback"
     );
 
+    public PhpRegexpLanguageInjector() {
+    }
+
     @NotNull
     @Override
     public List<? extends Class<? extends PsiElement>> elementsToInjectIn() {
