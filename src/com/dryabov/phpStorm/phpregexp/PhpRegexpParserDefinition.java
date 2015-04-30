@@ -30,18 +30,21 @@ public class PhpRegexpParserDefinition extends RegExpParserDefinition {
         return new RegExpLexer(CAPABILITIES);
     }
 
+    @NotNull
     @Override
     public PsiParser createParser(final Project project) {
         return new RegExpParser(CAPABILITIES);
     }
 
+    @NotNull
     @Override
     public IFileElementType getFileNodeType() {
         return PHP_REGEXP_FILE;
     }
 
+    @NotNull
     @Override
-    public PsiFile createFile(final FileViewProvider viewProvider) {
+    public PsiFile createFile(@NotNull final FileViewProvider viewProvider) {
         return new RegExpFile(viewProvider, PhpRegexpLanguage.INSTANCE);
     }
 }
