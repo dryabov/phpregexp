@@ -1,7 +1,9 @@
 package com.dryabov.phpStorm.phpregexp;
 
+import com.dryabov.phpStorm.phpregexp.settings.PhpRegexpProjectSettings;
 import com.intellij.lang.injection.MultiHostInjector;
 import com.intellij.lang.injection.MultiHostRegistrar;
+import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiLanguageInjectionHost;
@@ -80,10 +82,13 @@ public class PhpRegexpLanguageInjector implements MultiHostInjector {
         }
 
         if (skipElement) {
-            final char c = regex.charAt(0);
-            // popular regexp delimiters
-            if ("!#%&/=@_`|~".indexOf(c) >= 0) {
-                skipElement = !regex.matches(c + "(?>[^\\\\" + c + "]+|\\\\.)+" + c + "[imsuxADSUX]*");
+            final PhpRegexpProjectSettings settings = PhpRegexpProjectSettings.storedSettings(expr.getProject());
+            if (settings != null && settings.isParseAllStrings()) {
+                final char c = regex.charAt(0);
+                // popular regexp delimiters
+                if ("!#%&/=@_`|~".indexOf(c) >= 0) {
+                    skipElement = !regex.matches(c + "(?>[^\\\\" + c + "]+|\\\\.)+" + c + "[imsuxADSUX]*");
+                }
             }
         }
 
@@ -144,10 +149,11 @@ public class PhpRegexpLanguageInjector implements MultiHostInjector {
         final int endPos = pos;
         final boolean commentMode = regex.indexOf('x', endPos + 1) >= 0;
 
+        final TextRange range = TextRange.create(startPos, endPos).shiftRight(expr.getValueRange().getStartOffset());
+
         registrar
                 .startInjecting(commentMode ? PhpRegexpCommentModeLanguage.INSTANCE : PhpRegexpLanguage.INSTANCE)
-                .addPlace(null, null, (PsiLanguageInjectionHost) element,
-                        TextRange.create(startPos, endPos).shiftRight(expr.getValueRange().getStartOffset()))
+                .addPlace(null, null, (PsiLanguageInjectionHost) element, range)
                 .doneInjecting();
     }
 
@@ -156,6 +162,6 @@ public class PhpRegexpLanguageInjector implements MultiHostInjector {
     }
 
     private static boolean isalnum(final char c) {
-        return (c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z') || (c >= '0' && c <= '9');
+        return c >= 'A' && c <= 'Z' || c >= 'a' && c <= 'z' || c >= '0' && c <= '9';
     }
 }

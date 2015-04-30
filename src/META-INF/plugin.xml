@@ -27,6 +27,12 @@
   <application-components>
   </application-components>
   <project-components>
+    <component>
+      <implementation-class>com.dryabov.phpStorm.phpregexp.settings.PhpRegexpProjectSettingsConfigurable</implementation-class>
+    </component>
+    <component>
+      <implementation-class>com.dryabov.phpStorm.phpregexp.settings.PhpRegexpProjectSettingsComponent</implementation-class>
+    </component>
   </project-components>
   <actions>
   </actions>
