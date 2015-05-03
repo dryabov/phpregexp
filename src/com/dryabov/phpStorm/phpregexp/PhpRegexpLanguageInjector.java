@@ -3,7 +3,6 @@ package com.dryabov.phpStorm.phpregexp;
 import com.dryabov.phpStorm.phpregexp.settings.PhpRegexpProjectSettings;
 import com.intellij.lang.injection.MultiHostInjector;
 import com.intellij.lang.injection.MultiHostRegistrar;
-import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiLanguageInjectionHost;
