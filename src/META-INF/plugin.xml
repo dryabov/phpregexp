@@ -20,8 +20,12 @@
 
   <extensions defaultExtensionNs="com.intellij">
     <multiHostInjector implementation="com.dryabov.phpStorm.phpregexp.PhpRegexpLanguageInjector"/>
-    <lang.parserDefinition language="PhpRegExp" implementationClass="com.dryabov.phpStorm.phpregexp.PhpRegexpParserDefinition"/>
-    <lang.parserDefinition language="PhpRegExpCommentMode" implementationClass="com.dryabov.phpStorm.phpregexp.PhpRegexpCommentModeParserDefinition"/>
+    <lang.parserDefinition language="PhpRegExp"
+                           implementationClass="com.dryabov.phpStorm.phpregexp.PhpRegexpParserDefinition"/>
+    <lang.parserDefinition language="PhpRegExpCommentMode"
+                           implementationClass="com.dryabov.phpStorm.phpregexp.PhpRegexpCommentModeParserDefinition"/>
+    <regExpLanguageHost forClass="com.jetbrains.php.lang.psi.elements.StringLiteralExpression"
+                        implementationClass="com.dryabov.phpStorm.phpregexp.PhpRegexpHost"/>
   </extensions>
 
   <application-components>
