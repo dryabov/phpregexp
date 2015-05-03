@@ -10,6 +10,7 @@ import com.jetbrains.php.lang.psi.elements.*;
 import com.jetbrains.php.lang.psi.elements.impl.StringLiteralExpressionImpl;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -148,12 +149,41 @@ public class PhpRegexpLanguageInjector implements MultiHostInjector {
         final int endPos = pos;
         final boolean commentMode = regex.indexOf('x', endPos + 1) >= 0;
 
-        final TextRange range = TextRange.create(startPos, endPos).shiftRight(expr.getValueRange().getStartOffset());
+        List<Integer> rangeBreaks = new ArrayList<>();
+        rangeBreaks.add(startPos - 1);
+        if (startDelimiter == endDelimiter) {
+            for (int i = startPos; i < endPos; ++i) {
+                if (regex.charAt(i) == '\\') {
+                    if (regex.charAt(i + 1) == startDelimiter) {
+                        rangeBreaks.add(i);
+                    }
+                    ++i;
+                }
+            }
+        }
+        rangeBreaks.add(endPos);
 
-        registrar
-                .startInjecting(commentMode ? PhpRegexpCommentModeLanguage.INSTANCE : PhpRegexpLanguage.INSTANCE)
-                .addPlace(null, null, (PsiLanguageInjectionHost) element, range)
-                .doneInjecting();
+        int startOffset = expr.getValueRange().getStartOffset();
+        int ranges = rangeBreaks.size() - 1;
+
+        for (int i = 0; i < ranges; ++i) {
+            StringBuilder prefix = new StringBuilder();
+            for (int j = 0; j < i; ++j) {
+                prefix.append(regex.substring(rangeBreaks.get(j) + 1, rangeBreaks.get(j + 1)));
+            }
+
+            StringBuilder suffix = new StringBuilder();
+            for (int j = i + 1; j < ranges; ++j) {
+                suffix.append(regex.substring(rangeBreaks.get(j) + 1, rangeBreaks.get(j + 1)));
+            }
+
+            final TextRange range = TextRange.create(rangeBreaks.get(i) + 1, rangeBreaks.get(i+1)).shiftRight(startOffset);
+
+            registrar
+                    .startInjecting(commentMode ? PhpRegexpCommentModeLanguage.INSTANCE : PhpRegexpLanguage.INSTANCE)
+                    .addPlace(prefix.toString(), suffix.toString(), (PsiLanguageInjectionHost) element, range)
+                    .doneInjecting();
+        }
     }
 
     private static boolean isspace(final char c) {

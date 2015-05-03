@@ -17,9 +17,7 @@ public class PhpRegexpHost implements RegExpLanguageHost {
 
     @Override
     public boolean characterNeedsEscaping(char c) {
-        // @todo Temporary patch for issue with annotation inspector,
-        // @todo better to split regex into separate injections
-        return true;
+        return c == ']' || c == '}';
     }
 
     @Override
