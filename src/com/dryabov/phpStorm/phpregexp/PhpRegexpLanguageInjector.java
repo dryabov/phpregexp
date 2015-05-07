@@ -149,7 +149,7 @@ public class PhpRegexpLanguageInjector implements MultiHostInjector {
         final int endPos = pos;
         final boolean commentMode = regex.indexOf('x', endPos + 1) >= 0;
 
-        List<Integer> rangeBreaks = new ArrayList<>();
+        final List<Integer> rangeBreaks = new ArrayList<Integer>();
         rangeBreaks.add(startPos - 1);
         if (startDelimiter == endDelimiter) {
             for (int i = startPos; i < endPos; ++i) {
@@ -163,8 +163,8 @@ public class PhpRegexpLanguageInjector implements MultiHostInjector {
         }
         rangeBreaks.add(endPos);
 
-        int startOffset = expr.getValueRange().getStartOffset();
-        int ranges = rangeBreaks.size() - 1;
+        final int startOffset = expr.getValueRange().getStartOffset();
+        final int ranges = rangeBreaks.size() - 1;
 
         for (int i = 0; i < ranges; ++i) {
             StringBuilder prefix = new StringBuilder();
