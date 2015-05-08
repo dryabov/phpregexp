@@ -86,7 +86,7 @@ public class PhpRegexpLanguageInjector implements MultiHostInjector {
             if (settings != null && settings.isParseAllStrings()) {
                 final char c = regex.charAt(0);
                 // popular regexp delimiters
-                if ("!#%&/=@_`|~".indexOf(c) >= 0) {
+                if ("!#%&/=@_|~".indexOf(c) >= 0) {
                     skipElement = !regex.matches(c + "(?>[^\\\\" + c + "]+|\\\\.)+" + c + "[imsuxADSUX]*");
                 }
             }
