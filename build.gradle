@@ -1,0 +1,50 @@
+plugins {
+    id 'org.jetbrains.intellij' version '0.4.9'
+}
+
+group 'com.dryabov.phpstorm'
+version '0.9.4'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+}
+
+intellij {
+    version ideaVersion
+    plugins = ["com.jetbrains.php:${phpstormVersion}"]
+}
+
+publishPlugin {
+    username intellijPublishUsername
+    password intellijPublishPassword
+    channels 'nightly'
+}
+
+patchPluginXml {
+    sinceBuild = "171.2014.21"  // since 2017.1
+    untilBuild = ""
+    pluginDescription = """
+      Support of regular expressions parsing in PhpStorm
+    """
+    changeNotes = """
+      <dl>
+      <dt>0.9.4 (07 June 2019)</dt> <dd>Fixed settings page<br>
+                                        <strong>(please, check your PhpRegexp settings)</strong>;<br>
+                                        Improved support of double quoted and heredoc strings;<br>
+                                        "Parse All Strings" option is disabled by default;<br>
+                                        Added support of PhpStorm 2019.2;<br>
+                                        Minimal supported version is changed to PhpStorm 2017.1</dd>
+      <dt>0.9.3 (07 May 2015)</dt> <dd>Rebuild for JDK 1.7 (fixed PluginException)</dd>
+      <dt>0.9.2 (03 May 2015)</dt> <dd>Fixed issue with incorrect escape character annotation;<br>
+                                       Added support of Perl5 embedded comments</dd>
+      <dt>0.9.1 (15 Apr 2015)</dt> <dd>Fixed possible "infinite" loop in regex checker</dd>
+      <dt>0.9.0 (13 Apr 2015)</dt> <dd>Initial release</dd>
+      </dl>
+     """
+}
