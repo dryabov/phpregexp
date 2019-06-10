@@ -1,6 +1,6 @@
-package com.dryabov.phpstorm.phpregexp;
+package com.dryabov.phpStorm.phpregexp;
 
-import com.dryabov.phpstorm.phpregexp.settings.PhpRegexpProjectSettings;
+import com.dryabov.phpStorm.phpregexp.settings.PhpRegexpProjectSettings;
 import com.intellij.lang.injection.MultiHostInjector;
 import com.intellij.lang.injection.MultiHostRegistrar;
 import com.intellij.openapi.util.TextRange;

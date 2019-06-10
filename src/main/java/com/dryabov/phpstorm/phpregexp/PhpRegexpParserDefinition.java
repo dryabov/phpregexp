@@ -1,4 +1,4 @@
-package com.dryabov.phpstorm.phpregexp;
+package com.dryabov.phpStorm.phpregexp;
 
 import com.intellij.lang.PsiParser;
 import com.intellij.lexer.Lexer;

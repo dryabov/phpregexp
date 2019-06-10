@@ -1,4 +1,4 @@
-package com.dryabov.phpstorm.phpregexp.settings;
+package com.dryabov.phpStorm.phpregexp.settings;
 
 import com.intellij.openapi.Disposable;
 import org.jetbrains.annotations.NotNull;

@@ -1,5 +1,5 @@
 <idea-plugin>
-    <id>com.dryabov.phpstorm.phpregexp</id>
+    <id>com.dryabov.phpStorm.phpregexp</id>
     <name>PHP RegExp Support</name>
     <version>0.9.4</version>
     <vendor email="dryabov@yandex.ru" url="https://github.com/dryabov">Denis Ryabov</vendor>
@@ -24,22 +24,22 @@
     <depends>com.intellij.modules.platform</depends>
 
     <extensions defaultExtensionNs="com.intellij">
-        <multiHostInjector implementation="com.dryabov.phpstorm.phpregexp.PhpRegexpLanguageInjector" order="first"/>
+        <multiHostInjector implementation="com.dryabov.phpStorm.phpregexp.PhpRegexpLanguageInjector" order="first"/>
         <lang.parserDefinition language="PhpRegExpXT"
-                               implementationClass="com.dryabov.phpstorm.phpregexp.PhpRegexpParserDefinition"/>
+                               implementationClass="com.dryabov.phpStorm.phpregexp.PhpRegexpParserDefinition"/>
         <lang.parserDefinition language="PhpRegExpXTCommentMode"
-                               implementationClass="com.dryabov.phpstorm.phpregexp.PhpRegexpCommentModeParserDefinition"/>
+                               implementationClass="com.dryabov.phpStorm.phpregexp.PhpRegexpCommentModeParserDefinition"/>
         <regExpLanguageHost forClass="com.jetbrains.php.lang.psi.elements.StringLiteralExpression"
-                            implementationClass="com.dryabov.phpstorm.phpregexp.PhpRegexpHost"/>
-        <projectConfigurable instance="com.dryabov.phpstorm.phpregexp.settings.PhpRegexpProjectSettingsConfigurable"/>
+                            implementationClass="com.dryabov.phpStorm.phpregexp.PhpRegexpHost"/>
+        <projectConfigurable instance="com.dryabov.phpStorm.phpregexp.settings.PhpRegexpProjectSettingsConfigurable"/>
     </extensions>
 
     <project-components>
         <component>
-            <implementation-class>com.dryabov.phpstorm.phpregexp.settings.PhpRegexpProjectSettingsComponent</implementation-class>
+            <implementation-class>com.dryabov.phpStorm.phpregexp.settings.PhpRegexpProjectSettingsComponent</implementation-class>
         </component>
         <component>
-            <implementation-class>com.dryabov.phpstorm.phpregexp.settings.PhpRegexpProjectSettingsConfigurable</implementation-class>
+            <implementation-class>com.dryabov.phpStorm.phpregexp.settings.PhpRegexpProjectSettingsConfigurable</implementation-class>
         </component>
     </project-components>
 </idea-plugin>

@@ -2,7 +2,7 @@ plugins {
     id 'org.jetbrains.intellij' version '0.4.9'
 }
 
-group 'com.dryabov.phpstorm'
+group 'com.dryabov.phpStorm'
 version '0.9.4'
 
 sourceCompatibility = 1.8
@@ -21,8 +21,7 @@ intellij {
 }
 
 publishPlugin {
-    username intellijPublishUsername
-    password intellijPublishPassword
+    token intellijPublishToken
     channels 'nightly'
 }
 

@@ -1,4 +1,4 @@
-package com.dryabov.phpstorm.phpregexp;
+package com.dryabov.phpStorm.phpregexp;
 
 import org.intellij.lang.regexp.DefaultRegExpPropertiesProvider;
 import org.intellij.lang.regexp.RegExpLanguageHost;

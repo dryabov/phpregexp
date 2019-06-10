@@ -1,4 +1,4 @@
-package com.dryabov.phpstorm.phpregexp.settings;
+package com.dryabov.phpStorm.phpregexp.settings;
 
 import com.intellij.openapi.components.ProjectComponent;
 import com.intellij.openapi.options.Configurable;
@@ -22,7 +22,7 @@ public class PhpRegexpProjectSettingsConfigurable implements ProjectComponent, C
 
     @NotNull
     public String getComponentName() {
-        return "com.dryabov.phpstorm.phpregexp.ProjectSettingsConfigurable";
+        return "com.dryabov.phpStorm.phpregexp.ProjectSettingsConfigurable";
     }
 
     public void initComponent() {
