@@ -8,13 +8,14 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiLanguageInjectionHost;
 import com.jetbrains.php.lang.psi.elements.*;
 import com.jetbrains.php.lang.psi.elements.impl.StringLiteralExpressionImpl;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import org.jetbrains.annotations.NotNull;
 
 public final class PhpRegexpLanguageInjector implements MultiHostInjector {
     @NotNull
@@ -34,6 +35,7 @@ public final class PhpRegexpLanguageInjector implements MultiHostInjector {
             "\\preg_replace",
             "\\preg_replace_callback"
     );
+    // @TODO Add support of preg_replace_callback_array (PHP7)
 
     @NotNull
     private static final String phpNamePattern = "[A-Z_a-z\u007F-\uFFFF][0-9A-Z_a-z\u007F-\uFFFF]*";
@@ -55,7 +57,7 @@ public final class PhpRegexpLanguageInjector implements MultiHostInjector {
     }
 
     private static class Sections {
-        private final int maxSections = 20;
+        private static final int maxSections = 20; // should be even number
         int nSections = 0;
 
         @NotNull
@@ -67,12 +69,14 @@ public final class PhpRegexpLanguageInjector implements MultiHostInjector {
         @NotNull
         private final String regex;
 
-        Sections(@NotNull final String regex) {
-            this.regex = regex;
+        Sections(@NotNull final String _regex) {
+            regex = _regex;
         }
 
         boolean addSectionsPair(final int pos1, final int pos2, @NotNull final String skip) {
-            if (nSections >= maxSections) return false;
+            if (nSections >= maxSections) {
+                return false;
+            }
 
             rangeLeft[nSections] = pos1;
             rangeText[nSections] = (pos2 > pos1) ? regex.substring(pos1, pos2) : "";
@@ -114,8 +118,8 @@ public final class PhpRegexpLanguageInjector implements MultiHostInjector {
             }
         } else if (parent instanceof PhpPsiElement) { // array value element
             parent = parent.getParent();
-            if (parent instanceof ArrayCreationExpression &&
-                    ((PhpPsiElement) parent).getPrevPsiSibling() == null) {
+            if (parent instanceof ArrayCreationExpression
+                    && ((PhpPsiElement) parent).getPrevPsiSibling() == null) {
                 parent = parent.getParent();
                 if (parent instanceof ParameterList) {
                     parent = parent.getParent();
@@ -195,13 +199,17 @@ public final class PhpRegexpLanguageInjector implements MultiHostInjector {
             if (c == '\\') {
 
                 pos++;
-                if (pos >= length) return;
+                if (pos >= length) {
+                    return;
+                }
 
                 c = regex.charAt(pos);
-                if (c == '\\' || c == qDelimiter || c == endDelimiter || c == startDelimiter ||
-                        (doubleQuotes && (c == '$' || c == '{'))
+                if (c == '\\' || c == qDelimiter || c == endDelimiter || c == startDelimiter
+                        || (doubleQuotes && (c == '$' || c == '{'))
                 ) {
-                    if (!sections.addSectionsPair(prevPos, pos0, "")) return;
+                    if (!sections.addSectionsPair(prevPos, pos0, "")) {
+                        return;
+                    }
                     prevPos = pos0 + 1;
                 }
                 pos++;
@@ -214,10 +222,14 @@ public final class PhpRegexpLanguageInjector implements MultiHostInjector {
                     while (pos < length && regex.charAt(pos) != '}') {
                         pos++;
                     }
-                    if (pos >= length) return;
+                    if (pos >= length) {
+                        return;
+                    }
 
                     // @TODO Is it possible to resolve expression instead of using SKIP???
-                    if (!sections.addSectionsPair(prevPos, pos0, SKIP)) return;
+                    if (!sections.addSectionsPair(prevPos, pos0, SKIP)) {
+                        return;
+                    }
 
                     pos++;
                     prevPos = pos;
@@ -228,7 +240,9 @@ public final class PhpRegexpLanguageInjector implements MultiHostInjector {
                         pos += matcher.end();
 
                         // @TODO Is it possible to resolve expression instead of using SKIP???
-                        if (!sections.addSectionsPair(prevPos, pos0, SKIP)) return;
+                        if (!sections.addSectionsPair(prevPos, pos0, SKIP)) {
+                            return;
+                        }
 
                         prevPos = pos;
                     }
@@ -254,10 +268,14 @@ public final class PhpRegexpLanguageInjector implements MultiHostInjector {
                     }
                     pos++;
                 }
-                if (pos >= length) return;
+                if (pos >= length) {
+                    return;
+                }
 
                 // @TODO Is it possible to resolve expression instead of using SKIP???
-                if (!sections.addSectionsPair(prevPos, pos0, SKIP)) return;
+                if (!sections.addSectionsPair(prevPos, pos0, SKIP)) {
+                    return;
+                }
 
                 pos++;
                 prevPos = pos;
@@ -278,19 +296,24 @@ public final class PhpRegexpLanguageInjector implements MultiHostInjector {
             }
         }
 
-        if (pos >= length) return;
+        if (pos >= length) {
+            return;
+        }
 
         final int endPos = pos;
 
-        // @TODO Is it possible to resolve expression instead of using SKIP???
-        if (!sections.addSectionsPair(prevPos, endPos, "")) return;
+        if (!sections.addSectionsPair(prevPos, endPos, "")) {
+            return;
+        }
 
         final boolean commentMode = regex.indexOf('x', endPos + 1) >= 0;
 
         final int startOffset = expr.getValueRange().getStartOffset();
 
         for (int i = 0; i < sections.nSections; i += 2) {
-            if (sections.rangeLeft[i] == sections.rangeLeft[i + 1]) continue;
+            if (sections.rangeLeft[i] == sections.rangeLeft[i + 1]) {
+                continue;
+            }
 
             StringBuilder prefix = new StringBuilder();
             for (int j = 0; j < i; ++j) {
