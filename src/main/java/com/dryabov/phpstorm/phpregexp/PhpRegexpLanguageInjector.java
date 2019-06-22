@@ -232,6 +232,8 @@ public final class PhpRegexpLanguageInjector implements MultiHostInjector {
 
                         prevPos = pos;
                     }
+                } else {
+                    pos++;
                 }
 
             } else if (c == '{' && doubleQuotes && (pos + 1) < length && regex.charAt(pos + 1) == '$') {
