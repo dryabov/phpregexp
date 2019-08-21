@@ -204,7 +204,13 @@ public final class PhpRegexpLanguageInjector implements MultiHostInjector {
                 }
 
                 c = regex.charAt(pos);
-                if (c == '\\' || c == qDelimiter || c == endDelimiter || c == startDelimiter
+                if (c == '\\' && pos + 1 < length && regex.charAt(pos + 1) == endDelimiter) {
+                    pos++;
+                    if (!sections.addSectionsPair(prevPos, pos0, "")) {
+                        return;
+                    }
+                    prevPos = pos0 + 2;
+                } else if (c == '\\' || c == qDelimiter || c == endDelimiter || c == startDelimiter
                         || (doubleQuotes && (c == '$' || c == '{'))
                 ) {
                     if (!sections.addSectionsPair(prevPos, pos0, "")) {
