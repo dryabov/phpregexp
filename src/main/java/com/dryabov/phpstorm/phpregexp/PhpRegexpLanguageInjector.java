@@ -183,8 +183,6 @@ public final class PhpRegexpLanguageInjector implements MultiHostInjector {
 
         final boolean doubleQuotes = expr.isHeredoc() ? (expr.getText().charAt(3) != '\'') : !expr.isSingleQuote();
 
-        final char qDelimiter = doubleQuotes ? '"' : '\'';
-
         // get pattern
 
         final Sections sections = new Sections(regex);
@@ -205,19 +203,10 @@ public final class PhpRegexpLanguageInjector implements MultiHostInjector {
 
                 c = regex.charAt(pos);
                 if (c == '\\' && pos + 1 < length && regex.charAt(pos + 1) == endDelimiter) {
+                    // skip escaped end delimiter
                     pos++;
-                    if (!sections.addSectionsPair(prevPos, pos0, "")) {
-                        return;
-                    }
-                    prevPos = pos0 + 2;
-                } else if (c == '\\' || c == qDelimiter || c == endDelimiter || c == startDelimiter
-                        || (doubleQuotes && (c == '$' || c == '{'))
-                ) {
-                    if (!sections.addSectionsPair(prevPos, pos0, "")) {
-                        return;
-                    }
-                    prevPos = pos0 + 1;
                 }
+
                 pos++;
 
             } else if (c == '$' && doubleQuotes && (pos + 1) < length) {
