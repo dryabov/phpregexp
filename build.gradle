@@ -3,7 +3,7 @@ plugins {
 }
 
 group 'com.dryabov.phpStorm'
-version '0.9.6'
+version '0.9.7'
 
 sourceCompatibility = 1.8
 
@@ -33,6 +33,8 @@ patchPluginXml {
     """
     changeNotes """
       <dl>
+      <dt>0.9.7 (06 April 2021)</dt> <dd>Fixed conflict with injection escaper from PHP plugin<br>
+                                         Fixed irrelevant "Duplicate character '_' inside character class" inspection</dd>
       <dt>0.9.6 (21 August 2019)</dt> <dd>Fixed processing of end delimiter escaping in regex</dd>
       <dt>0.9.5 (23 June 2019)</dt> <dd>Fixed processing of \$ in regex</dd>
       <dt>0.9.4.1 (10 June 2019)</dt> <dd>Rebuild with IU-2017.1</dd>
