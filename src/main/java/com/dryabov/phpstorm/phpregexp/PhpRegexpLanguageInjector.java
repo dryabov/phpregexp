@@ -140,7 +140,7 @@ public final class PhpRegexpLanguageInjector implements MultiHostInjector {
                 // popular regexp delimiters
                 // @TODO: consider to remove "%" from this list (a popular delimiter in placeholders, e.g. %USER%)
                 if ("!#%&/=@_|~".indexOf(c) >= 0) {
-                    skipElement = !regex.matches(c + "(?>[^\\\\" + c + "]+|\\\\.)+" + c + "[imsuxADSUX]*");
+                    skipElement = !regex.matches(c + "(?>[^\\\\" + c + "]+|\\\\.)+" + c + "[imsuxADJSUX]*");
                 }
             }
         }
