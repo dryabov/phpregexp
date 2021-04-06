@@ -44,7 +44,7 @@ public final class PhpRegexpLanguageInjector implements MultiHostInjector {
     private static final Pattern phpExprPattern = Pattern.compile("^" + phpNamePattern + "(?:\\[.*?]|(?:->" + phpNamePattern + ")+)?");
 
     @NotNull
-    private static final String SKIP = "__SKIP__";
+    private static final String SKIP = "<SKIP>";
 
 
     public PhpRegexpLanguageInjector() {
